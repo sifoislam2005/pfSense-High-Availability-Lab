@@ -70,7 +70,6 @@ Retrouvez le rapport complet et détaillé de ce Lab (avec captures d'écran) ic
 
 ## 👤 Auteur
 
-**[Ton Prénom et Nom]**
-- **Email :** ton.email@domain.com
-- **LinkedIn :** [linkedin.com/in/votre-profil](https://linkedin.com/in/votre-profil)
-- **GitHub :** [github.com/votre-username](https://github.com/votre-username)
+**Seyf DJILALI AYAD**
+- **Email :** s.djilaliayad@gmail.com
+- **LinkedIn :** [linkedin.com/in/seyfelislam-djilaliayad]((https://www.linkedin.com/in/seyfelislam-djilaliayad/?isSelfProfile=true))
