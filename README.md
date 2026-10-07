@@ -1,25 +1,25 @@
 # 🛡️ pfSense High Availability (HA) Lab
 
-A comprehensive step-by-step guide and documentation for configuring **High Availability (HA)** on pfSense using **CARP**, **XMLRPC Configuration Synchronization**, and **Advanced Outbound NAT**.
+Documentation complète et guide étape par étape pour la mise en place d'une infrastructure à **Haute Disponibilité (HA)** sur pfSense en utilisant **CARP**, la **synchronisation XMLRPC** et le **NAT Sortant Avancé (Outbound NAT)**.
 
 ---
 
-## 📌 Project Overview
+## 📌 Présentation du Projet
 
-This lab demonstrates how to build a redundant, highly available firewall infrastructure. In a production environment, this setup ensures zero downtime by seamlessly failing over network traffic from a Master node to a Backup node if a hardware or network failure occurs.
+Ce Lab démontre comment concevoir et déployer une architecture de pare-feu redondante à haute disponibilité. Dans un environnement de production, cette configuration garantit une continuité de service maximale (zero downtime) en basculant automatiquement le trafic du nœud Maître (Master) vers le nœud de Secours (Backup) en cas de panne matérielle ou réseau.
 
 ---
 
-## 🛠️ Infrastructure & Topology
+## 🛠️ Infrastructure & Topologie
 
-- **Hypervisor:** VMware Workstation
-- **Firewall Nodes:** 2x pfSense Virtual Machines (Master & Backup)
-- **VIP (Virtual IPs):** Managed via CARP for WAN, LAN, and DMZ interfaces
-- **Synchronization:** XMLRPC over a dedicated Sync interface (pfsync)
+- **Hyperviseur :** VMware Workstation / ESXi
+- **Nœuds Pare-feu :** 2x Machines Virtuelles pfSense (Master & Backup)
+- **VIP (IP Virtuelles) :** Gérées via le protocole CARP pour les interfaces WAN, LAN et DMZ
+- **Synchronisation :** Protocole XMLRPC via une interface dédiée (pfsync)
 
-### Network Interfaces & Addressing Scheme
+### Plan d'Adressage Réseau
 
-| Interface | Master IP | Backup IP | Virtual IP (CARP) | Subnet Mask |
+| Interface | IP Master | IP Backup | IP Virtuelle (CARP VIP) | Masque de sous-réseau |
 | :--- | :--- | :--- | :--- | :--- |
 | **WAN** | `192.168.253.10` | `192.168.253.20` | `192.168.253.200` | `/24` |
 | **LAN** | `192.168.1.2` | `192.168.1.3` | `192.168.1.1` | `/24` |
@@ -28,49 +28,49 @@ This lab demonstrates how to build a redundant, highly available firewall infras
 
 ---
 
-## 🚀 Key Features Configured
+## 🚀 Fonctionnalités Clés Configurées
 
-1. **CARP (Common Address Redundancy Protocol):**
-   - Configured Virtual IPs for WAN, LAN, and DMZ.
-   - Assigned appropriate skew values (`0` for Master, `100` for Backup) to control mastership.
+1. **CARP (Common Address Redundancy Protocol) :**
+   - Configuration des IP Virtuelles partagées pour les interfaces WAN, LAN et DMZ.
+   - Ajustement des valeurs de Skew (`0` pour le Master, `100` pour le Backup) pour définir la priorité des nœuds.
 
-2. **State & Config Synchronization (XMLRPC & pfsync):**
-   - Configured high-availability sync over a dedicated point-to-point interface.
-   - Synchronized firewall rules, NAT configurations, aliases, and system settings automatically from Master to Backup.
+2. **Synchronisation d'État et de Configuration (XMLRPC & pfsync) :**
+   - Mise en place d'un lien dédié point-à-point pour la synchronisation.
+   - Réplication automatique des règles de pare-feu, de la configuration NAT, des alias et des paramètres système du Master vers le Backup.
 
-3. **Outbound NAT Redundancy:**
-   - Switched from Automatic NAT to **Hybrid / Manual Outbound NAT**.
-   - Mapped internal traffic (LAN/DMZ) to the **WAN CARP VIP** (`192.168.253.200`) instead of individual interface IPs to maintain seamless outbound connectivity during failover.
-
----
-
-## 🔍 Troubleshooting & Key Learnings
-
-During the implementation, an XMLRPC sync error occurred due to protocol mismatch on port 443:
-- **Issue:** Master node was trying to communicate via `HTTP` while the Backup node was listening on `HTTPS`.
-- **Root Cause:** Inconsistent webConfigurator protocol settings between nodes.
-- **Resolution:** Explicitly configured HTTPS protocol and port synchronization across both nodes, successfully resolving the XMLRPC authentication error.
+3. **Redondance du NAT Sortant (Outbound NAT) :**
+   - Passage du mode NAT automatique au mode **Hybride / Manuel**.
+   - Mappage du trafic sortant (LAN/DMZ) sur l'IP Virtuelle **WAN CARP VIP** (`192.168.253.200`) au lieu de l'IP physique de l'interface, garantissant le maintien des sessions réseau lors d'un basculement.
 
 ---
 
-## ✅ Failover & Validation Tests
+## 🔍 Diagnostic & Résolution de Problème
 
-- **CARP Status Check:** Verified that Master holds `MASTER` status on all CARP interfaces while Backup stays in `BACKUP` mode.
-- **Config Sync Verification:** Created rules/aliases on Master and confirmed instant replication to Backup.
-- **Simulated Host Failure:** Powered down Master node; VIPs instantly transitioned to Backup node with zero dropped connections.
+Lors du déploiement, une erreur de synchronisation XMLRPC est survenue en raison d'un conflit de protocole sur le port 443 :
+- **Problème :** Le nœud Master tentait de communiquer en `HTTP` alors que le nœud Backup écoutait en `HTTPS`.
+- **Cause Racine :** Incohérence des paramètres du webConfigurator entre les deux pare-feux.
+- **Résolution :** Alignement de la configuration sur le protocole HTTPS et le port de synchronisation sur les deux nœuds, résolvant ainsi l'erreur d'authentification XMLRPC.
+
+---
+
+## ✅ Tests de Basculement & Validation
+
+- **Vérification du Statut CARP :** Validation du rôle `MASTER` sur le pare-feu principal et du rôle `BACKUP` sur le second.
+- **Test de Synchronisation :** Création d'alias et de règles de filtrage sur le Master avec vérification de leur réplication instantanée sur le Backup.
+- **Simulation de Panne :** Extinction forcée du nœud Master ; basculement immédiat et transparent des adresses VIP vers le nœud Backup sans perte de connectivité.
 
 ---
 
 ## 📄 Documentation PDF
 
-You can find the full detailed lab report with screenshots in the repository:
+Retrouvez le rapport complet et détaillé de ce Lab (avec captures d'écran) ici :
 ➡️ [`pfSense_HA_Lab_Report.pdf`](./pfSense_HA_Lab_Report.pdf)
 
 ---
 
-## 👤 Author
+## 👤 Auteur
 
-**[اسمك ولقبك]**
-- **Email:** your.email@domain.com
-- **LinkedIn:** [linkedin.com/in/yourprofile](https://linkedin.com/in/yourprofile)
-- **GitHub:** [github.com/yourusername](https://github.com/yourusername)
+**[Ton Prénom et Nom]**
+- **Email :** ton.email@domain.com
+- **LinkedIn :** [linkedin.com/in/votre-profil](https://linkedin.com/in/votre-profil)
+- **GitHub :** [github.com/votre-username](https://github.com/votre-username)
