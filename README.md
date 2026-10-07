@@ -61,15 +61,8 @@ Lors du déploiement, une erreur de synchronisation XMLRPC est survenue en raiso
 
 ---
 
-## 📄 Documentation PDF
-
-Retrouvez le rapport complet et détaillé de ce Lab (avec captures d'écran) ici :
-➡️ [`pfSense_HA_Lab_Report.pdf`](./pfSense_HA_Lab_Report.pdf)
-
----
-
 ## 👤 Auteur
 
 **Seyf DJILALI AYAD**
 - **Email :** s.djilaliayad@gmail.com
-- **LinkedIn :** [linkedin.com/in/seyfelislam-djilaliayad]((https://www.linkedin.com/in/seyfelislam-djilaliayad/?isSelfProfile=true))
+- **LinkedIn :** [linkedin.com/in/seyfelislam-djilaliayad](https://www.linkedin.com/in/seyfelislam-djilaliayad/?isSelfProfile=true)
