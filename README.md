@@ -12,7 +12,7 @@ Ce Lab démontre comment concevoir et déployer une architecture de pare-feu red
 
 ## 🛠️ Infrastructure & Topologie
 
-- **Hyperviseur :** VMware Workstation / ESXi
+- **Hyperviseur :** VMware Workstation
 - **Nœuds Pare-feu :** 2x Machines Virtuelles pfSense (Master & Backup)
 - **VIP (IP Virtuelles) :** Gérées via le protocole CARP pour les interfaces WAN, LAN et DMZ
 - **Synchronisation :** Protocole XMLRPC via une interface dédiée (pfsync)
